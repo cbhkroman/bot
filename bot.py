@@ -9,7 +9,6 @@ import yt_dlp
 import os
 import youtube_dl
 
-# Bot Configuration
 TOKEN = "MTM0NjE3NDg5ODU5NDI1MDkwMw.GKNO-1.KnJx3gQd8tW_7Q4_f-dBBa7TVgAj3AYzJLi31Q"
 intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
@@ -18,7 +17,6 @@ bot = commands.Bot(command_prefix="!", intents=intents)
 reminders = {}
 music_queue = deque()
 
-# --- CHAT FUNCTIONALITY (Using Gemini API via OpenAI) ---
 @bot.event
 async def on_message(message):
     if message.author == bot.user:
@@ -31,7 +29,6 @@ async def on_message(message):
     await message.channel.send(response["choices"][0]["message"]["content"])
     await bot.process_commands(message)
 
-# --- REMINDER FUNCTIONALITY ---
 @bot.command()
 async def remind(ctx, time: str, *, reminder: str):
     """Set a reminder with a specific time format (e.g., 10m, 1h, 1d)."""
@@ -50,7 +47,7 @@ async def remind(ctx, time: str, *, reminder: str):
         await ctx.send(f"⏰ {ctx.author.mention}, reminder: {reminder}")
         del reminders[ctx.author.id]
 
-# --- POLL FUNCTIONALITY ---
+
 @bot.command()
 async def poll(ctx, question: str, *options: str):
     """Create a poll with up to 10 options."""
@@ -73,14 +70,13 @@ async def on_message(message):
     # Process commands properly
     await bot.process_commands(message)  
 
-# --- CUSTOM WELCOME MESSAGES ---
 @bot.event
 async def on_member_join(member):
     channel = discord.utils.get(member.guild.text_channels, name="general")  # Adjust as needed
     if channel:
         await channel.send(f"Welcome {member.mention} to {member.guild.name}! 🎉")
 
-# --- AI-POWERED SUMMARIES ---
+
 @bot.command()
 async def summarize(ctx, *, text):
     try:
@@ -96,8 +92,7 @@ async def summarize(ctx, *, text):
 
     except Exception as e:
         await ctx.send(f"Error: {e}")
-# --- MUSIC QUEUE FUNCTIONALITY --- 
-# --- MUSIC FUNCTIONALITY ---
+
 @bot.command()
 async def join(ctx):
     """Join the voice channel."""
@@ -170,5 +165,4 @@ async def queue(ctx):
         await ctx.send("Current Queue: " + ", ".join(music_queue))
     else:
         await ctx.send("The queue is empty.")
-# Start Bot 
 bot.run(TOKEN)
